@@ -1,9 +1,9 @@
 <template lang="pug">
-  .home
+  .basket
 </template>
 
 <script>
 export default {
-  name: 'HomeView',
+  name: 'BasketView',
 }
 </script>

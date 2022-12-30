@@ -1,31 +1,21 @@
 <template lang="pug">
   v-app
     v-app-bar(app color='primary' dark)
-      .d-flex.align-center
-        v-img.shrink.mr-2(
-          alt='Vuetify Logo'
-          contain
-          src='https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png'
-          transition='scale-transition'
-          width='40'
-        )
-        v-img.shrink.mt-1.hidden-sm-and-down(
-          alt='Vuetify Name'
-          contain
-          min-width='100'
-          src='https://cdn.vuetifyjs.com/images/logos/vuetify-name-dark.png'
-          width='100'
-        )
-      v-spacer
-      v-btn(
-        href='https://github.com/vuetifyjs/vuetify/releases/latest'
-        target='_blank'
-        text
-      )
-        v-icon mdi-open-in-new
-        span.mr-2 Latest Release
+      v-container.py-0.fill-height
+        v-avatar.mr-10
+          img(
+            src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png"
+            alt="Vuetify Logo"
+          )
+        v-btn(
+          v-for="link in links"
+          :key="link.label"
+          :to="link.url"
+          text
+        ) {{ link.label }}
     v-main
-      router-view
+      v-container
+        router-view
 </template>
 
 <script>
@@ -34,7 +24,14 @@ export default {
   name: 'App',
 
   data: () => ({
-    //
+    links: [
+      { label: 'Catalog', url: '/catalog' },
+      { label: 'Basket', url: '/basket' },
+    ],
   }),
+
+  computed: {
+    title() { return this.$route && this.$route.meta ? this.$route.meta.title : '' },
+  },
 }
 </script>
