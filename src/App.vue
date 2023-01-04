@@ -13,7 +13,7 @@
           :to="link.url"
           text
         ) {{ link.label }}
-    v-main
+    v-main.grey.lighten-3
       v-container
         router-view
 </template>
@@ -29,9 +29,5 @@ export default {
       { label: 'Basket', url: '/basket' },
     ],
   }),
-
-  computed: {
-    title() { return this.$route && this.$route.meta ? this.$route.meta.title : '' },
-  },
 }
 </script>
