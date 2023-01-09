@@ -26,8 +26,7 @@ v-row.catalog-view
               v-list-item-title {{cat}}
   v-col
     v-sheet(min-height='70vh' rounded='lg')
-      h1.pa-4 {{title}}
-      v-divider
+      view-title
       v-row.catalog-items.pa-4
         v-col.catalog-item-wrap(
           v-for='item in list'
@@ -43,19 +42,13 @@ v-row.catalog-view
             v-card-actions
               .mx-2 $ {{item.price}}
               v-spacer
-              v-text-field.basket-input(
+              basket-line-counter(
                 v-if='item.isInBasket'
                 :value='item.basketCount'
-                type='number'
-                hide-spin-buttons
-                icon
-                @input='countInput($event, item)'
-                @blur='checkCount(item)'
+                @countInput='item.basketCount = +$event'
+                @checkCount='checkCount(item)'
+                @countChange='countChange(item, $event)'
               )
-                template(#prepend)
-                  v-icon(@click='countChange(item, -1)') mdi-minus
-                template(#append)
-                  v-icon(@click='countChange(item, 1)') mdi-plus
               v-btn(
                 v-else
                 icon
@@ -67,8 +60,14 @@ v-row.catalog-view
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import viewTitle from '@/components/viewTitle.vue'
+import basketLineCounter from '@/components/basketLineCounter.vue'
+
 export default {
   name: 'CatalogView',
+  components: {
+    viewTitle, basketLineCounter,
+  },
 
   data: () => ({
     list: [],
@@ -77,7 +76,6 @@ export default {
   }),
 
   computed: {
-    title() { return this.$route && this.$route.meta ? this.$route.meta.title : '' },
     query() { return this.$route && this.$route.query ? this.$route.query : {} },
     ...mapGetters('basket', ['basket']),
   },
@@ -143,9 +141,6 @@ export default {
       product.basketCount += count
       product.isInBasket = !!product.basketCount
       this.toBasket({ product, count: product.basketCount })
-    },
-    countInput(value, product) {
-      product.basketCount = +value
     },
     checkCount(product) {
       let count = product.basketCount

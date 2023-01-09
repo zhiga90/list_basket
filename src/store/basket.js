@@ -4,6 +4,12 @@ const state = {
 
 const getters = {
   basket: state => state.basket,
+  basketFlat: state => state.basket.map(item => ({
+    ...item,
+    total: item.item.price * item.count,
+  })),
+  subtotal: state => state.basket
+    .reduce((old, cur) => old + (cur.item.price * cur.count), 0),
 }
 
 const mutations = {
@@ -26,7 +32,7 @@ const mutations = {
 }
 
 const actions = {
-  toBasket({ state, commit, dispatch }, { product, count }) {
+  toBasket({ state, commit }, { product, count }) {
     const { basket } = state
     const indexById = basket.findIndex(item => item.id === product.id)
     if (indexById > -1) {
@@ -39,8 +45,13 @@ const actions = {
       commit('addToBasket', product)
     }
   },
-  cleanBasket({ commit }, product) {
-    commit('cleanBasket', product)
+  removeFromBasket({ state, commit }, product) {
+    const { basket } = state
+    const indexById = basket.findIndex(item => item.id === product.id)
+    commit('removeFromBasket', indexById)
+  },
+  cleanBasket({ commit }) {
+    commit('cleanBasket')
   },
 }
 
