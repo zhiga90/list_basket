@@ -54,7 +54,7 @@ export default {
 
   data: () => ({
     headers: [
-      { text: 'Item', value: 'title' },
+      { text: 'Item', value: 'item.title' },
       { text: 'Price', value: 'item.price' },
       { text: 'Qty', width: '150px', sortables: false, value: 'count' },
       { text: 'Total', value: 'total' },
